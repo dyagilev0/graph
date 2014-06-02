@@ -55,44 +55,8 @@ console.log('done');
 
 var g2 = new Graph();
 
-g2.addDirectEdge(1,2);
-g2.addDirectEdge(1,3);
-g2.addDirectEdge(2,1);
-g2.addDirectEdge(2,3);
-g2.addDirectEdge(2,4);
-g2.addDirectEdge(3,1);
-g2.addDirectEdge(3,2);
-g2.addDirectEdge(3,4);
-g2.addDirectEdge(4,2);
-g2.addDirectEdge(4,3);
-g2.addDirectEdge(4,5);
-g2.addDirectEdge(5,4);
+g2.loadLine([1,2,3,4]);
 
-assert(g2.validate(),'valid edge');
+//assert(g2.validate(),'valid edge');
 
 console.log('Test successfully completed.');
-
-
-console.log(g2.graph[0]);
-console.log(g2.graph[1]);
-console.log(g2.graph[2]);
-console.log(g2.graph[3]);
-console.log(g2.graph[4]);
-
-console.log(g2.cutOnce());
-//g2.mergeVertices(2,4);
-console.log(g2.graph[0]);
-console.log(g2.graph[1]);
-console.log(g2.graph[2]);
-console.log(g2.graph[3]);
-//g2.cutOnce();
-//g2.mergeVertices(4,1);
-console.log(g2.graph[0]);
-console.log(g2.graph[1]);
-console.log(g2.graph[2]);
-//g2.cutOnce();
-//g2.mergeVertices(5,3);
-console.log(g2.graph[0]);
-console.log(g2.graph[1]);
-
-

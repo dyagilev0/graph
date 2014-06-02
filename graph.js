@@ -1,6 +1,12 @@
 (function() {
-	function Graph() {
+	function Graph(a) {
 		this.graph = [];
+		this.cache = {};
+		if (a) {
+			for (i = 0; i < a.length; i++) {
+				this.loadLine(a[i]);
+			}
+		}
 	}
 
 	Graph.prototype.addVertex = function(v) {
@@ -22,7 +28,7 @@
 		this.graph = this.graph.filter(function(item) {
 			return item.v !== v;
 		})
-
+		delete this.cache[v];
 		return this;
 	}
 
@@ -81,11 +87,15 @@
 	}
 
 	Graph.prototype.getVertex = function(v) {
+		if (this.cache[v]) return this.cache[v];
 		for (var i = 0; i < this.graph.length; i++) {
-			if (this.graph[i].v === v) return this.graph[i];
+			if (this.graph[i].v === v) {
+				this.cache[v] = this.graph[i];
+				return this.graph[i];
+			}
 		}
 
-		console.log('WARN: vertex (' + v + ') not found');
+		//console.log('WARN: vertex (' + v + ') not found');
 		return null;
 	}
 
@@ -147,18 +157,39 @@
 	Graph.prototype.cutOnce = function() {
 		var vertex, edge;
 
-		while (this.graph.length < 2) {
+		while (this.graph.length > 2) {
 			vertex = this._getRandom(this.graph.length);
 			edge = this._getRandom(this.graph[vertex].e.length);
-			console.log(vertex, edge);
+			//console.log(vertex, edge);
 			this.mergeVertices(this.graph[vertex].v, this.graph[vertex].e[edge]);
 		}
+		return this.graph[0].e.length;
+	}
 
-		return this.graph[0].e[0].length;
+	Graph.prototype.cut = function(times) {
+		var i, a = [];
+		times = times || this.graph.length * this.graph.length * Math.log(this.graph.length);
+		for (i = 0; i < times; i++) {
+			a.push(this.cutOnce());
+		}
+
+		function getMaxOfArray(numArray) {
+			return Math.max.apply(null, numArray);
+		}
+
+		return getMaxOfArray(a);
 	}
 
 	Graph.prototype._getRandom = function(max) {
 		return Math.floor(Math.random() * max);
+	}
+
+	Graph.prototype.loadLine = function(a) {
+		var v = a[0],
+			i;
+		for (i = 1; i < a.length; i++) {
+			if (a[i]) this.addDirectEdge(v, a[i]);
+		}
 	}
 
 	exports.Graph = Graph;
