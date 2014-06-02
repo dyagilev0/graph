@@ -1,0 +1,98 @@
+var Graph = require('./graph.js').Graph;
+var assert = require('assert');
+var g = new Graph();
+
+console.log('Test start:');
+
+console.log('Check addVertex and getVertex:');
+assert(g.addVertex(1) === g.getVertex(1), 'vertex add');
+assert(g.getVertex(1).v === 1, 'vertex add (v)');
+assert(g.getVertex(1).e.length === 0, 'vertex add (e)');
+console.log('done');
+
+console.log('Check delVertex:');
+assert(g.delVertex(1) === g, 'vertex del');
+assert(g.getVertex(1) === null, 'vertex delete (v)');
+console.log('done');
+
+
+console.log('Check addDirectEdge:');
+g.addVertex(1);
+g.addVertex(2);
+
+g.addDirectEdge(1, 2);
+assert(g.getVertex(1).e[0] === 2, 'edge add 1 -> 2');
+
+g.addDirectEdge(2, 1);
+assert(g.getVertex(2).e[0] === 1, 'edge add 2 -> 1');
+
+assert(g.addDirectEdge(1, 3) === g, 'edge add 1 -> 3 === null');
+assert(g.addDirectEdge(3, 1) === g, 'edge add 3 -> 1 === null');
+console.log('done');
+
+console.log('Check hasEdge:');
+assert(g.hasEdge(1, 2), 'has edge 1 -> 2 && 2 -> 1');
+assert(g.hasEdge(1, 4) === null, 'has not vertex 4');
+g.addVertex(4);
+assert(g.hasEdge(1, 4) === false, 'has not edge 1 -> 4 && 4 -> 1');
+console.log('done');
+
+
+console.log('Check delUndirectEdge:');
+g.delUndirectEdge(1,2);
+assert(g.getVertex(1).e.length === 1, 'edge del 1 -> 2');
+assert(g.getVertex(2).e.length === 0, 'edge del 2 -> 1');
+console.log('done');
+
+console.log('Check validator');
+assert(g.validate(),'valid edge');
+g.addDirectEdge(1,2);
+g.addDirectEdge(2,1);
+assert(g.validate(),'valid edge');
+g.delVertex(2);
+assert(g.validate(),'valid edge');
+console.log('done');
+
+var g2 = new Graph();
+
+g2.addDirectEdge(1,2);
+g2.addDirectEdge(1,3);
+g2.addDirectEdge(2,1);
+g2.addDirectEdge(2,3);
+g2.addDirectEdge(2,4);
+g2.addDirectEdge(3,1);
+g2.addDirectEdge(3,2);
+g2.addDirectEdge(3,4);
+g2.addDirectEdge(4,2);
+g2.addDirectEdge(4,3);
+g2.addDirectEdge(4,5);
+g2.addDirectEdge(5,4);
+
+assert(g2.validate(),'valid edge');
+
+console.log('Test successfully completed.');
+
+
+console.log(g2.graph[0]);
+console.log(g2.graph[1]);
+console.log(g2.graph[2]);
+console.log(g2.graph[3]);
+console.log(g2.graph[4]);
+
+console.log(g2.cutOnce());
+//g2.mergeVertices(2,4);
+console.log(g2.graph[0]);
+console.log(g2.graph[1]);
+console.log(g2.graph[2]);
+console.log(g2.graph[3]);
+//g2.cutOnce();
+//g2.mergeVertices(4,1);
+console.log(g2.graph[0]);
+console.log(g2.graph[1]);
+console.log(g2.graph[2]);
+//g2.cutOnce();
+//g2.mergeVertices(5,3);
+console.log(g2.graph[0]);
+console.log(g2.graph[1]);
+
+
