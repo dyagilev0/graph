@@ -62,7 +62,6 @@ g2.addDirectEdge(2,1);
 g2.delDirectEdge(1,2);
 assert(g2.hasDirectEdge(1,2) === false,'valid direct edge 1');
 assert(g2.hasDirectEdge(2,1),'valid direct edge 2');
-
 console.log('done');
 
 

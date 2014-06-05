@@ -14,7 +14,8 @@
 		if (!this.hasVertex(v)) {
 			oV = {
 				v: v,
-				e: []
+				e: [],
+				explored: false
 			};
 			this.graph.push(oV);
 		}
@@ -74,7 +75,7 @@
 			return null;
 		}
 
-		oU.e = oU.e.filter(function(item){
+		oU.e = oU.e.filter(function(item) {
 			return item !== v;
 		});
 	}
@@ -98,7 +99,7 @@
 		return false;
 	}
 
-		Graph.prototype.hasDirectEdge = function(u, v) {
+	Graph.prototype.hasDirectEdge = function(u, v) {
 		var oU = this.getVertex(u);
 
 		if (!oU) {
@@ -131,6 +132,28 @@
 		return this.graph.some(function(item) {
 			return item.v === v;
 		});
+	}
+
+	Graph.prototype._dfs = function(s) {
+		var oS = this.getVertex(s),
+			i, oV;
+
+		if (!oS) return null;
+
+		oS.explored = true;
+		for (i = 0; i < oS.e.length; i++) {
+			oV = this.getVertex(oS.e[i]);
+			if (oV.explored === false) {
+				oV.explored = true;
+				this._dfs(oV.v);
+			}
+		}
+
+	}
+
+	Graph.prototype.dfs = function(s) {
+		this._setExplored(false);
+		this._dfs(s);
 	}
 
 	Graph.prototype.validate = function() {
@@ -188,7 +211,6 @@
 		while (this.graph.length > 2) {
 			vertex = this._getRandom(this.graph.length);
 			edge = this._getRandom(this.graph[vertex].e.length);
-			//console.log(vertex, edge);
 			this.mergeVertices(this.graph[vertex].v, this.graph[vertex].e[edge]);
 		}
 		return this.graph[0].e.length;
@@ -215,9 +237,20 @@
 	Graph.prototype.loadLine = function(a) {
 		var v = a[0],
 			i;
-		for (i = 1; i < a.length; i++) {
-			if (a[i]) this.addDirectEdge(v, a[i]);
+		if (a.length > 1) {
+			for (i = 1; i < a.length; i++) {
+				if (a[i]) this.addDirectEdge(v, a[i]);
+			}
+		} else {
+			this.addVertex(v);
 		}
+	}
+
+	Graph.prototype._setExplored = function(flag) {
+		this.graph = this.graph.map(function(item) {
+			item.explored = flag;
+			return item;
+		});
 	}
 
 	exports.Graph = Graph;
