@@ -15,7 +15,8 @@
 			oV = {
 				v: v,
 				e: [],
-				explored: false
+				explored: false,
+				n: null
 			};
 			this.graph.push(oV);
 		}
@@ -134,7 +135,7 @@
 		});
 	}
 
-	Graph.prototype._dfs = function(s) {
+	Graph.prototype._dfs = function(s, counter) {
 		var oS = this.getVertex(s),
 			i, oV;
 
@@ -145,15 +146,33 @@
 			oV = this.getVertex(oS.e[i]);
 			if (oV.explored === false) {
 				oV.explored = true;
-				this._dfs(oV.v);
+				this._dfs(oV.v,counter);
 			}
 		}
+
+		if (counter) oS.n = counter();
 
 	}
 
 	Graph.prototype.dfs = function(s) {
 		this._setExplored(false);
 		this._dfs(s);
+	}
+
+	Graph.prototype.dfsLoop = function() {
+		var counter = (function(t) {
+			var n = t.graph.length;
+			return function() {
+				return n--;
+			}
+		})(this);
+
+		this._setExplored(false);
+		for (i = 0; i < this.graph.length; i++) {
+			if (this.graph[i].explored === false) {
+				this._dfs(this.graph[i].v, counter);
+			}
+		}
 	}
 
 	Graph.prototype.validate = function() {

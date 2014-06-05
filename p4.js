@@ -12,7 +12,7 @@ fs.readFile('dfs.txt', 'utf-8', function(err, data) {
 	
 	var g = new Graph(arr);
 
-	g.dfs('7');
+	g.dfsLoop();
 
 	console.log(g.graph[0]);
 	console.log(g.graph[1]);
