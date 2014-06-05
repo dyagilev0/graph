@@ -30,11 +30,11 @@ assert(g.addDirectEdge(1, 3) === g, 'edge add 1 -> 3 === null');
 assert(g.addDirectEdge(3, 1) === g, 'edge add 3 -> 1 === null');
 console.log('done');
 
-console.log('Check hasEdge:');
-assert(g.hasEdge(1, 2), 'has edge 1 -> 2 && 2 -> 1');
-assert(g.hasEdge(1, 4) === null, 'has not vertex 4');
+console.log('Check hasUndirectEdge:');
+assert(g.hasUndirectEdge(1, 2), 'has edge 1 -> 2 && 2 -> 1');
+assert(g.hasUndirectEdge(1, 4) === null, 'has not vertex 4');
 g.addVertex(4);
-assert(g.hasEdge(1, 4) === false, 'has not edge 1 -> 4 && 4 -> 1');
+assert(g.hasUndirectEdge(1, 4) === false, 'has not edge 1 -> 4 && 4 -> 1');
 console.log('done');
 
 
@@ -53,10 +53,17 @@ g.delVertex(2);
 assert(g.validate(),'valid edge');
 console.log('done');
 
+
+
+console.log('Check delDirectEdge');
 var g2 = new Graph();
+g2.addDirectEdge(1,2);
+g2.addDirectEdge(2,1);
+g2.delDirectEdge(1,2);
+assert(g2.hasDirectEdge(1,2) === false,'valid direct edge 1');
+assert(g2.hasDirectEdge(2,1),'valid direct edge 2');
 
-g2.loadLine([1,2,3,4]);
+console.log('done');
 
-//assert(g2.validate(),'valid edge');
 
 console.log('Test successfully completed.');

@@ -52,7 +52,7 @@
 		var oU = this.getVertex(u);
 		var oV = this.getVertex(v);
 
-		if (!oU || !oV || !this.hasEdge(u, v)) {
+		if (!oU || !oV || !this.hasUndirectEdge(u, v)) {
 			return null;
 		}
 
@@ -67,7 +67,19 @@
 		return this;
 	}
 
-	Graph.prototype.hasEdge = function(u, v) {
+	Graph.prototype.delDirectEdge = function(u, v) {
+		var oU = this.getVertex(u);
+
+		if (!oU || !this.hasDirectEdge(u, v)) {
+			return null;
+		}
+
+		oU.e = oU.e.filter(function(item){
+			return item !== v;
+		});
+	}
+
+	Graph.prototype.hasUndirectEdge = function(u, v) {
 		var oU = this.getVertex(u);
 		var oV = this.getVertex(v);
 
@@ -79,6 +91,22 @@
 			return item === v;
 		}) && oV.e.some(function(item) {
 			return item === u;
+		})) {
+			return true;
+		}
+
+		return false;
+	}
+
+		Graph.prototype.hasDirectEdge = function(u, v) {
+		var oU = this.getVertex(u);
+
+		if (!oU) {
+			return null;
+		}
+
+		if (oU.e.some(function(item) {
+			return item === v;
 		})) {
 			return true;
 		}
