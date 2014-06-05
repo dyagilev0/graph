@@ -6,10 +6,10 @@ var fs = require('fs');
 fs.readFile('dfs.txt', 'utf-8', function(err, data) {
 	if (err) throw err;
 
-	var arr = data.split('\r\n').map(function(item) {
+	var arr = data.split('\n').map(function(item) {
 		return item.split('\t');
 	});
-	
+
 	var g = new Graph(arr);
 
 	g.dfsLoop();
@@ -22,5 +22,6 @@ fs.readFile('dfs.txt', 'utf-8', function(err, data) {
 	console.log(g.graph[5]);
 	console.log(g.graph[6]);
 	console.log(g.graph[7]);
-	
+	console.log(g.graph[8]);
+
 });

@@ -1,6 +1,7 @@
 (function() {
 	function Graph(a) {
 		this.graph = [];
+		this.rGraph = [];
 		this.cache = {};
 		if (a) {
 			for (i = 0; i < a.length; i++) {
@@ -146,7 +147,7 @@
 			oV = this.getVertex(oS.e[i]);
 			if (oV.explored === false) {
 				oV.explored = true;
-				this._dfs(oV.v,counter);
+				this._dfs(oV.v, counter);
 			}
 		}
 
