@@ -153,7 +153,7 @@
 		})(this);
 
 		this._setExplored(false);
-		for (i in graph) {
+		for (i in this.graph) {
 			if (this.graph[i].explored === false) {
 				this._dfs(this.graph[i].v, counter);
 			}
@@ -199,9 +199,6 @@
 
 	Graph.prototype.cutOnce = function() {
 		var vertex, edge;
-
-
-
 		while (this.length > 2) {
 			vertex = this._getRandom(this.length);
 			console.log(vertex);
@@ -209,7 +206,6 @@
 			this.mergeVertices(this.graph[vertex].v, this.graph[vertex].e[edge]);
 		}
 
-		console.log(this.graph);
 		for (i in this.graph) {
 			return this.graph[i].e.length;
 		}
@@ -247,7 +243,7 @@
 
 	Graph.prototype._setExplored = function(flag) {
 		for (i in this.graph) {
-			this.graph.explored = flag;
+			this.graph[i].explored = flag;
 		}
 	}
 
