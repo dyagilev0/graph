@@ -1,0 +1,1 @@
+bash -c "ulimit -s 65500; exec /usr/local/bin/node --stack-size=65500 p4.js"

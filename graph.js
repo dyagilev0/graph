@@ -145,19 +145,32 @@
 	}
 
 	Graph.prototype.dfsLoop = function() {
-		var counter = (function(t) {
-			var n = t.graph.length;
+		var m = this.getArrayOfNode('v');
+		var counter = (function() {
+			var t = 0;
 			return function() {
-				return n--;
+				return ++t;
 			}
-		})(this);
+		})();
 
 		this._setExplored(false);
-		for (i in this.graph) {
-			if (this.graph[i].explored === false) {
-				this._dfs(this.graph[i].v, counter);
+		for (var i = 0; i < this.length; i++) {
+			if (this.graph[m[i]].explored === false) {
+				this._dfs(this.graph[m[i]].v, counter);
 			}
 		}
+	}
+
+	Graph.prototype.getArrayOfNode = function(property) {
+		var m = [],
+			i;
+		for (i in this.graph) {
+			m.push(Number(this.graph[i][property]));
+		}
+
+		return m.sort(function(a, b) {
+			return a < b ? 1 : -1
+		})
 	}
 
 	Graph.prototype.mergeVertices = function(u, v) {

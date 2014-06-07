@@ -18,18 +18,21 @@ rl.on('line', function(line) {
 fs.readFile('SCC.txt', 'utf-8', function(err, data) {
 	if (err) throw err;
 
-	console.log('read file');
+	console.time('read file');
 	var arr = data.split('\n').map(function(item) {
 		return item.split(' ');
 	});
+	console.timeEnd('read file');
 
-	console.log('create graph')
+	console.time('create graph')
 	var g = new Graph(arr);
+	console.timeEnd('create graph')
 
-	console.log('start dfs loop')
-	g.dfsLoop();
+	console.time('start dfs loop')
+	console.log(g.dfsLoop());
+	console.timeEnd('start dfs loop')
+	
 
-	console.log(g.graph[0]);
 	console.log(g.graph[1]);
 	console.log(g.graph[2]);
 	console.log(g.graph[3]);
@@ -37,5 +40,7 @@ fs.readFile('SCC.txt', 'utf-8', function(err, data) {
 	console.log(g.graph[5]);
 	console.log(g.graph[6]);
 	console.log(g.graph[7]);
+	console.log(g.graph[8]);
+	console.log(g.graph[9]);
 	
 });
