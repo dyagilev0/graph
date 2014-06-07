@@ -12,7 +12,7 @@ console.log('done');
 
 console.log('Check delVertex:');
 assert(g.delVertex(1) === g, 'vertex del');
-assert(g.getVertex(1) === null, 'vertex delete (v)');
+assert(g.getVertex(1) === undefined, 'vertex delete (v)');
 console.log('done');
 
 
@@ -43,17 +43,6 @@ g.delUndirectEdge(1,2);
 assert(g.getVertex(1).e.length === 1, 'edge del 1 -> 2');
 assert(g.getVertex(2).e.length === 0, 'edge del 2 -> 1');
 console.log('done');
-
-console.log('Check validator');
-assert(g.validate(),'valid edge');
-g.addDirectEdge(1,2);
-g.addDirectEdge(2,1);
-assert(g.validate(),'valid edge');
-g.delVertex(2);
-assert(g.validate(),'valid edge');
-console.log('done');
-
-
 
 console.log('Check delDirectEdge');
 var g2 = new Graph();

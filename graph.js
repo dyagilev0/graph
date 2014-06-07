@@ -1,8 +1,8 @@
 (function() {
 	function Graph(a) {
-		this.graph = [];
-		this.rGraph = [];
-		this.cache = {};
+		this.graph = {};
+		this.length = 0;
+
 		if (a) {
 			for (i = 0; i < a.length; i++) {
 				this.loadLine(a[i]);
@@ -15,23 +15,20 @@
 		if (!this.hasVertex(v)) {
 			oV = {
 				v: v,
-				e: [],
-				explored: false,
-				n: null
+				e: []
 			};
-			this.graph.push(oV);
+			this.graph[v] = oV;
+			this.length++;
 		}
 		return oV;
 	}
 
 	Graph.prototype.delVertex = function(v) {
-		for (var i = 0; i < this.graph.length; i++) {
+		for (i in this.graph.length) {
 			this.delUndirectEdge(v, this.graph[i].v);
 		};
-		this.graph = this.graph.filter(function(item) {
-			return item.v !== v;
-		})
-		delete this.cache[v];
+		delete this.graph[v];
+		this.length++;
 		return this;
 	}
 
@@ -39,14 +36,10 @@
 		var oU = this.getVertex(u);
 		var oV = this.getVertex(v);
 
-		/*		if (!oU || !oV) {
-			return null;
-		}*/
 		if (!oU) oU = this.addVertex(u);
 		if (!oV) oV = this.addVertex(v);
 
 		oU.e.push(v);
-		//oV.e.push(u);
 
 		return this;
 	}
@@ -118,22 +111,13 @@
 	}
 
 	Graph.prototype.getVertex = function(v) {
-		if (this.cache[v]) return this.cache[v];
-		for (var i = 0; i < this.graph.length; i++) {
-			if (this.graph[i].v === v) {
-				this.cache[v] = this.graph[i];
-				return this.graph[i];
-			}
-		}
-
-		//console.log('WARN: vertex (' + v + ') not found');
-		return null;
+		return this.graph[v];
 	}
 
+
+
 	Graph.prototype.hasVertex = function(v) {
-		return this.graph.some(function(item) {
-			return item.v === v;
-		});
+		return this.graph[v] ? true : false;
 	}
 
 	Graph.prototype._dfs = function(s, counter) {
@@ -161,33 +145,32 @@
 	}
 
 	Graph.prototype.dfsLoop = function() {
-		var counter = (function(t) {
-			var n = t.graph.length;
+		var m = this.getArrayOfNode('v');
+		var counter = (function() {
+			var t = 0;
 			return function() {
-				return n--;
+				return ++t;
 			}
-		})(this);
+		})();
 
 		this._setExplored(false);
-		for (i = 0; i < this.graph.length; i++) {
-			if (this.graph[i].explored === false) {
-				this._dfs(this.graph[i].v, counter);
+		for (var i = 0; i < this.length; i++) {
+			if (this.graph[m[i]].explored === false) {
+				this._dfs(this.graph[m[i]].v, counter);
 			}
 		}
 	}
 
-	Graph.prototype.validate = function() {
-		var i, j, oV;
-		for (i = 0; i < this.graph.length; i++) {
-			oV = this.graph[i];
-			for (j = 0; j < oV.e.length; j++) {
-				if (!this.hasVertex(oV.e[j])) {
-					console.log('ERR: not valid graph');
-					return false;
-				}
-			}
+	Graph.prototype.getArrayOfNode = function(property) {
+		var m = [],
+			i;
+		for (i in this.graph) {
+			m.push(Number(this.graph[i][property]));
 		}
-		return true;
+
+		return m.sort(function(a, b) {
+			return a < b ? 1 : -1
+		})
 	}
 
 	Graph.prototype.mergeVertices = function(u, v) {
@@ -209,12 +192,13 @@
 	// u <-- v
 	Graph.prototype._changeEdge = function(u, v) {
 		var i, oV;
-		for (i = 0; i < this.graph.length; i++) {
+		for (i in this.graph) {
 			oV = this.graph[i];
 			oV.e = oV.e.map(function(item) {
 				return item !== u ? item : v;
 			});
 		}
+
 		return this;
 	}
 
@@ -222,18 +206,22 @@
 		oV.e = oV.e.filter(function(item) {
 			return item !== oV.v;
 		});
+
 		return this;
 	}
 
 	Graph.prototype.cutOnce = function() {
 		var vertex, edge;
-
-		while (this.graph.length > 2) {
-			vertex = this._getRandom(this.graph.length);
+		while (this.length > 2) {
+			vertex = this._getRandom(this.length);
+			console.log(vertex);
 			edge = this._getRandom(this.graph[vertex].e.length);
 			this.mergeVertices(this.graph[vertex].v, this.graph[vertex].e[edge]);
 		}
-		return this.graph[0].e.length;
+
+		for (i in this.graph) {
+			return this.graph[i].e.length;
+		}
 	}
 
 	Graph.prototype.cut = function(times) {
@@ -243,11 +231,11 @@
 			a.push(this.cutOnce());
 		}
 
-		function getMaxOfArray(numArray) {
-			return Math.max.apply(null, numArray);
+		function getMinOfArray(numArray) {
+			return Math.min.apply(null, numArray);
 		}
 
-		return getMaxOfArray(a);
+		return getMinOfArray(a);
 	}
 
 	Graph.prototype._getRandom = function(max) {
@@ -267,10 +255,9 @@
 	}
 
 	Graph.prototype._setExplored = function(flag) {
-		this.graph = this.graph.map(function(item) {
-			item.explored = flag;
-			return item;
-		});
+		for (i in this.graph) {
+			this.graph[i].explored = flag;
+		}
 	}
 
 	exports.Graph = Graph;
