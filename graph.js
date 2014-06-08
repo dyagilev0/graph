@@ -12,7 +12,7 @@
 
 	Graph.prototype.addVertex = function(v) {
 		var oV = {};
-		if (!this.hasVertex(v)) {
+		if (!this.hasVertex.call(this, v)) {
 			oV = {
 				v: v,
 				e: []
@@ -33,11 +33,11 @@
 	}
 
 	Graph.prototype.addDirectEdge = function(u, v) {
-		var oU = this.getVertex(u);
-		var oV = this.getVertex(v);
+		var oU = this.getVertex.call(this, u);
+		var oV = this.getVertex.call(this, v);
 
-		if (!oU) oU = this.addVertex(u);
-		if (!oV) oV = this.addVertex(v);
+		if (!oU) oU = this.addVertex.call(this, u);
+		if (!oV) oV = this.addVertex.call(this, v);
 
 		oU.e.push(v);
 
@@ -128,6 +128,41 @@
 		return m.sort(function(a, b) {
 			return a < b ? 1 : -1
 		})
+	}
+
+	Graph.prototype.reverse = function() {
+		var t = new Graph(),
+			v;
+		for (i in this.graph) {
+			v = this.graph[i].v;
+			for (j = 0; j < this.graph[i].e.length; j++) {
+				t.addDirectEdge(this.graph[i].e[j], v);
+			}
+		}
+		this.graph = t.graph;
+		delete t;
+
+		return this;
+	}
+
+	Graph.prototype.reverseWithChanging = function() {
+		var t = new Graph(),
+			a = {},
+			v;
+		for (i in this.graph) {
+			a[this.graph[i].v] = this.graph[i].n;
+		}
+
+		for (i in this.graph) {
+			v = this.graph[i].v;
+			for (j = 0; j < this.graph[i].e.length; j++) {
+				t.addDirectEdge(a[this.graph[i].e[j]], a[v]);
+			}
+		}
+		this.graph = t.graph;
+		delete t;
+
+		return this;
 	}
 
 	Graph.prototype.mergeVertices = function(u, v) {
