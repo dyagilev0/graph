@@ -114,51 +114,8 @@
 		return this.graph[v];
 	}
 
-
-
 	Graph.prototype.hasVertex = function(v) {
 		return this.graph[v] ? true : false;
-	}
-
-	Graph.prototype._dfs = function(s, counter) {
-		var oS = this.getVertex(s),
-			i, oV;
-
-		if (!oS) return null;
-
-		oS.explored = true;
-		for (i = 0; i < oS.e.length; i++) {
-			oV = this.getVertex(oS.e[i]);
-			if (oV.explored === false) {
-				oV.explored = true;
-				this._dfs(oV.v, counter);
-			}
-		}
-
-		if (counter) oS.n = counter();
-
-	}
-
-	Graph.prototype.dfs = function(s) {
-		this._setExplored(false);
-		this._dfs(s);
-	}
-
-	Graph.prototype.dfsLoop = function() {
-		var m = this.getArrayOfNode('v');
-		var counter = (function() {
-			var t = 0;
-			return function() {
-				return ++t;
-			}
-		})();
-
-		this._setExplored(false);
-		for (var i = 0; i < this.length; i++) {
-			if (this.graph[m[i]].explored === false) {
-				this._dfs(this.graph[m[i]].v, counter);
-			}
-		}
 	}
 
 	Graph.prototype.getArrayOfNode = function(property) {
