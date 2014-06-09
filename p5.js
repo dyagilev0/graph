@@ -11,5 +11,4 @@ fs.readFile('dijkstraData.txt', 'utf-8', function(err, data) {
 	var g = new Graph(arr);
 
 	console.log(g.graph[1]);
-
 });
