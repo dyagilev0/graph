@@ -15,8 +15,7 @@
 		if (!this.hasVertex.call(this, v)) {
 			oV = {
 				v: v,
-				e: [],
-				l: []
+				e: []
 			};
 			this.graph[v] = oV;
 			this.length++;
