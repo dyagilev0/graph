@@ -22,3 +22,31 @@ fs.readFile('kargerMinCut.txt', 'utf-8', function(err, data) {
 var getMaxOfArray = function(numArray) {
 	return Math.min.apply(null, numArray);
 }
+
+Graph.prototype.cutOnce = function() {
+		var vertex, edge;
+		while (this.length > 2) {
+			vertex = this._getRandom(this.length);
+			console.log(vertex);
+			edge = this._getRandom(this.graph[vertex].e.length);
+			this.mergeVertices(this.graph[vertex].v, this.graph[vertex].e[edge]);
+		}
+
+		for (i in this.graph) {
+			return this.graph[i].e.length;
+		}
+	}
+
+	Graph.prototype.cut = function(times) {
+		var i, a = [];
+		times = times || this.graph.length * this.graph.length * Math.log(this.graph.length);
+		for (i = 0; i < times; i++) {
+			a.push(this.cutOnce());
+		}
+
+		function getMinOfArray(numArray) {
+			return Math.min.apply(null, numArray);
+		}
+
+		return getMinOfArray(a);
+	}

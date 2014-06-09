@@ -15,7 +15,8 @@
 		if (!this.hasVertex.call(this, v)) {
 			oV = {
 				v: v,
-				e: []
+				e: [],
+				l: []
 			};
 			this.graph[v] = oV;
 			this.length++;
@@ -202,44 +203,22 @@
 		return this;
 	}
 
-	Graph.prototype.cutOnce = function() {
-		var vertex, edge;
-		while (this.length > 2) {
-			vertex = this._getRandom(this.length);
-			console.log(vertex);
-			edge = this._getRandom(this.graph[vertex].e.length);
-			this.mergeVertices(this.graph[vertex].v, this.graph[vertex].e[edge]);
-		}
-
-		for (i in this.graph) {
-			return this.graph[i].e.length;
-		}
-	}
-
-	Graph.prototype.cut = function(times) {
-		var i, a = [];
-		times = times || this.graph.length * this.graph.length * Math.log(this.graph.length);
-		for (i = 0; i < times; i++) {
-			a.push(this.cutOnce());
-		}
-
-		function getMinOfArray(numArray) {
-			return Math.min.apply(null, numArray);
-		}
-
-		return getMinOfArray(a);
-	}
-
 	Graph.prototype._getRandom = function(max) {
 		return Math.floor(Math.random() * max);
 	}
 
 	Graph.prototype.loadLine = function(a) {
 		var v = a[0],
-			i;
+			i, nL;
 		if (a.length > 1) {
 			for (i = 1; i < a.length; i++) {
-				if (a[i]) this.addDirectEdge(v, a[i]);
+				if (a[i].indexOf(',') !== -1) {
+					nL = a[i].split(',');
+					this.addDirectEdge(v, nL[0]);
+					this.getVertex(v).l.push(nL[1]);
+				} else {
+					if (a[i]) this.addDirectEdge(v, a[i]);
+				}
 			}
 		} else {
 			this.addVertex(v);
