@@ -15,7 +15,8 @@
 		if (!this.hasVertex.call(this, v)) {
 			oV = {
 				v: v,
-				e: []
+				e: [],
+				l: []
 			};
 			this.graph[v] = oV;
 			this.length++;
@@ -152,7 +153,7 @@
 
 		for (i in this.graph) {
 			v = this.graph[i].v;
-			order.push(''+this.graph[i].n);
+			order.push('' + this.graph[i].n);
 			for (j = 0; j < this.graph[i].e.length; j++) {
 				t.addDirectEdge(this.graph[i].e[j], v);
 			}
