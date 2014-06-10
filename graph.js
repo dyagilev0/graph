@@ -132,9 +132,10 @@
 
 	Graph.prototype.reverse = function() {
 		var t = new Graph(),
-			v;
+			v, order = [];
 		for (i in this.graph) {
 			v = this.graph[i].v;
+			order.push(this.graph[i].v);
 			for (j = 0; j < this.graph[i].e.length; j++) {
 				t.addDirectEdge(this.graph[i].e[j], v);
 			}
@@ -142,27 +143,24 @@
 		this.graph = t.graph;
 		delete t;
 
-		return this;
+		return order.reverse();
 	}
 
 	Graph.prototype.reverseWithChanging = function() {
 		var t = new Graph(),
-			a = {},
-			v;
-		for (i in this.graph) {
-			a[this.graph[i].v] = this.graph[i].n;
-		}
+			v, order = [];
 
 		for (i in this.graph) {
 			v = this.graph[i].v;
+			order.push(''+this.graph[i].n);
 			for (j = 0; j < this.graph[i].e.length; j++) {
-				t.addDirectEdge(a[this.graph[i].e[j]], a[v]);
+				t.addDirectEdge(this.graph[i].e[j], v);
 			}
 		}
 		this.graph = t.graph;
 		delete t;
 
-		return this;
+		return order;
 	}
 
 	Graph.prototype.mergeVertices = function(u, v) {
