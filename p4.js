@@ -1,11 +1,11 @@
 var Graph = require('./graph.js').Graph;
 var fs = require('fs');
 
-fs.readFile('dfs.txt', 'utf-8', function(err, data) {
+fs.readFile('SCC.txt', 'utf-8', function(err, data) {
 	if (err) throw err;
 
 	console.time('read file and sliting');
-	var a = data.split('\r\n').map(function(item) {
+	var a = data.split('\n').map(function(item) {
 		return item.split(' ')
 	});
 	console.timeEnd('read file and sliting');
@@ -81,7 +81,7 @@ var dfsLoop = function(g, order) {
 		}
 	})();
 
-	console.log(order);
+	//console.log(order);
 	g._setExplored(false);
 	for (var i = 0; i < order.length; i++) {
 		if (g.graph[order[i]].explored === false) {
